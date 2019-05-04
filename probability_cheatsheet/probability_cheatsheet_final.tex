@@ -851,6 +851,121 @@ Let $T = \frac{E}{\sqrt{V/n}}$ where $Z \sim \N(0, 1)$ and $V \sim \chi_n^2$ (re
 
 \textbf{Also:} For $Z_1,\dots,Z_n\simiid \N(0,1)$, we can find using JFI that $\sum_{j=1}^n (Z_j-\bar{Z_n})^2\sim \chi^2_{n-1}$.
 
+\section{Linear Regression}
+\begin{description}
+\item[Regression function] $r(x) = E(Y| X = x) = \int yf(y|x) \, dy$. \\  Assume data is $\{(Y_1, X_1), \dots, (Y_n, X_n)\}, \text{ i.i.d. }F_{Y, X}$
+
+\item[Simple Linear Regression Model] $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$ \\
+where $E(\epsilon_i | X_i = x) = 0$ and $\var(\epsilon_i | X_i = x) = \sigma^2$ \\
+Predicted or fitted values: $\hat{Y_i} = \hat\beta_0 + \hat\beta_1 x$
+
+\item[Residual Sums of Squares] $\sum_{i = 1}^n \hat\epsilon_i^2$ 
+
+\item[Least Squares Estimators] MLEs are assuming that errors are normally distributed
+\begin{align*}
+    \hat\beta_1 &= \frac{\sum_{i = 1}^n (Y_i - \bar{Y})(X_i - \bar{X})}{\sum_{i = 1}^n (X_i - \bar{X})^2} \text{ (MLE)}\\
+    \hat\beta_0 &= \bar{Y} - \hat\beta_1\bar{X} \text{ (MLE)}\\
+    \hat\sigma^2 &= \frac{1}{n - 2} \sum_{i = 1}^n \hat\epsilon_i^2 \text{(unbiased, not MLE)}
+\end{align*} 
+
+\item[Asymptotic Distribution] $\sqrt{n}(\hat\beta_1 - \beta_1) \stackrel{d}{\to} \N\left(0, \frac{\sigma^2}{\sigma^2_X}\right)$
+
+\item[Student-t Distribution] Let $\hat\sigma^2$ as above, and let $s_{xx}^2 = \sum_{i = 1}^n (x_i - \bar{x})^2$. Then
+\begin{align*}
+    \frac{\hat\beta_1 - \beta_1}{\hat\sigma/s_{xx}} \sim t_{n - 2}
+\end{align*} 
+
+\item[Prediction] We see a new $X = x_0$ and want to predict new $Y$. Predict $Y$ with estimators, $\hat{Y} = \hat\beta_0 + \hat\beta_1 x_0$.
+\begin{align*}
+    E(\hat{Y} - Y | \vec{X} = \vec{x}) &= 0 \\ 
+    \var(\hat{Y} - Y | \vec{X} = \vec{x}) &= \sigma^2 \left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{s_xx^2} + 1 \right) \\ 
+    \frac{\hat{Y} - Y}{\hat\sigma \sqrt{\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{s_xx^2} + 1}} &\sim t_{n - 2}
+\end{align*} 
+The $1 - \alpha$ confidence interval for $Y$ is
+\begin{align*}
+    \hat{Y} \pm t^{-1}_{n - 2}(\alpha / 2) \hat\sigma \sqrt{\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{s_xx^2} + 1}
+\end{align*}
+\end{description}
+
+\subsection{Slutsky's and Continuous Mapping Theorem}
+\begin{description}
+\item[Slustky's Theorem] If $X_1, X_2 \dots$ and $Y_1, Y_2, \dots$ are sequences of random variables such that $X_n \stackrel{d}{\to} X$ and $Y_n \stackrel{p}{\to} c$, then
+\begin{enumerate}
+\itemsep0em
+\item $X_n + Y_n \stackrel{d}{\to} X + c$
+\item $X_n Y_n \stackrel{d}{\to} cX$ 
+\item if $c \neq 0$, then $X_n/Y-n \stackrel{d}{\to} X/c$
+\end{enumerate} 
+\item[Continuous Mapping Theorem] If $X_1, X_2, \dots$ are sequences of random variables and $g$ is a continuous function, then
+\begin{enumerate}
+\itemsep0em
+\item if $X_n \stackrel{d}{\to} X$, then $g(X_n) \stackrel{d}{\to} g(X)$.
+\item if $X_n \stackrel{p}{\to} c$, then $g(X_n) \stackrel{p}{\to} g(c)$.
+\end{enumerate}
+
+
+\end{description}
+
+\section{Hypothesis Testing}
+\subsection{Null and Alternative Hypotheses}
+\begin{description}
+\item[Hypothesis Testing Framework] Partition parameter space $\Theta$ into two disjoint sets, $\Theta = \Theta_0 \cup \Theta_1$
+\item[Null Hypothesis] $H_0 : \theta \in \Theta_0$. Simple if it consists of a single point. Composite if not simple. 
+\item[Alternative Hypothesis] $H_1 : \theta \in \Theta_1$.
+\item[Rejection Region] Set $R$ of possible values $\vec{y}$ for the data such that we reject the null hypothesis $\vec{y} \in R$. Usually of the form $R = \{\vec{y} : t(\vec{y}) > c\}$ or $R = \{\vec{y} : t(\vec{y}) > c_U \text{ or } t(\vec{y}) < c_L\}$. Often, $c$ is some quantile, $F^{-1}(\alpha)$.
+\item[Type I Error] $\theta \in \Theta_0$ but $\vec{y} \in R$ (incorrectly reject null).
+\item[Type II Error] $\theta \in \Theta_1$ but $\vec{y} \notin R$ (incorrectly fail to reject).
+\item[One-sided test] $H_0 : \theta = \theta_0$ vs $H_1: \theta \neq \theta_0$
+\item[Two-sided test] $H_0 : \theta \leq \theta_0$ vs $H_1 : \theta > \theta_0$.    
+\end{description}
+
+\subsection{Size and Power}
+\begin{description}
+\item[Power function] $\beta(\theta) = P(\vec{Y} \in R|\theta)$. How likely we are to reject for a given true parameter value. Typically, power of a test refers to $\beta(\theta)$ for $\theta \in \Theta_1$.
+\item[Size] Size or level of a test is the maximum possible Type I error probability. $\alpha = \max_{\theta \in \Theta_0} \beta(\theta)$.
+\end{description}
+
+\subsection{t-test}
+Let 
+\begin{align*}
+    \hat\sigma^2 &= \frac{1}{n - 1}\sum_{i = 1}^n (Y_i - \bar{Y})^2 \\
+    T(\vec{Y}) &= \frac{\bar{Y} - \mu_0}{\hat\sigma / \sqrt{n}} \\
+    \implies T(\vec{Y}) &\sim t_{n - 1}
+\end{align*}
+
+\subsection{p-values}
+A \textbf{p-value} is the smallest $\alpha$ (Type I error rate) at which we could have rejected $H_0$, so
+\begin{align*}
+    p = \inf{\alpha : y \in R_\alpha}
+\end{align*}
+Often, our rejection region is of the form $R = \{\vec{y} : T(\vec{y}) > F^{-1}(\alpha)\}$. In this case, we can calculate $p = F(t(\vec{y}))$. \\ 
+\textbf{Theorem: } Let $T$ be a continuous test statistic, and suppose we are using a hypothesis test that rejects $H_0 : \theta = \theta_0$ when $T$ is large. As a random variable, the p-value is $\Unif(0, 1)$ under $H_0$. 
+
+\subsection{Misc Tests}
+\begin{description}
+\item[Wald Test] Under some regularity conditions, $\hat\theta \stackrel{\cdot}{\sim} \N(\theta_0, I^{-1}(\theta_0))$. So, can use the test statistic,
+\begin{align*}
+    t(\vec{Y}) = \sqrt{I(\theta_0)}(\hat\theta - \theta_0) \sim \N(0, 1)
+\end{align*} 
+\item[Score test] Under some regularity conditions, $s(\vec{y}, \theta_0)$ is asymptotically Normal.
+\begin{align*}
+    \frac{s(\vec{y}; \theta_0)}{\sqrt{\I(\theta_0)}} \sim \N(0, 1)
+\end{align*} 
+\item[Likelihood Ratio Test (LRT)] If testing a simple null vs simple alternative, then Neyman-Pearson lemma says most powerful test will be based on likelihood ratio 
+\begin{align*}
+    LR = \frac{L(\theta_1, \vec{Y})}{L(\theta_0, \vec{Y})}
+\end{align*} 
+The more general LRT is given by
+\begin{align*}
+    LR = \frac{L(\hat\theta; \vec{Y})}{L(\theta_0; \vec{Y})}
+\end{align*}
+We also have the folllowing theorem under some mild regularity theorems, 
+\begin{align*}
+    \Lambda(\vec{Y}) &= 2 \log\left(\frac{L(\hat\theta, \vec{Y})}{L(\theta_0; \vec{Y})}\right) \stackrel{D}{\to} \chi_1^2
+\end{align*}
+\end{description}
+
+
 \subsection{Canonical Examples}
 \subsubsection{MLE for Normal with Both Unknown}
 By applying JFI, see that the MLE $\hat\mu=\bar{X}$ does not depend on $\sigma^2$. Plug in so the second term from JFI drops out. Set $t=\sum_{j=1}^n (x_j-\overline{x_n})^2$ (it is a constant of the data), take the derivative and find $\hat\sigma^2=\frac{t}{n}$.
