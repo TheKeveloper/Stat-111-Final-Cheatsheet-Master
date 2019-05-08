@@ -155,7 +155,7 @@
     \[ F(x) = 1 - e^{-x}, \textrm{ for $x>0$} \]
     By  UoU, if we plug $X$ into this function then we get a uniformly distributed random variable.
     \[ F(X) = 1 - e^{-X} \sim \textrm{Unif}(0,1)\]}
-    Similarly, if $U \sim \textrm{Unif}(0,1)$ then $F^{-1}(U)$ has CDF $F$. The key point is that {for any continuous random variable $X$, we can transform it into a Uniform random variable and back by using its CDF.}
+    Similarly, if $U \sim \textrm{Unif}(0,1)$ then $F^{-1}(U)$ has CDF $F$. \hide{The key point is that for any continuous random variable $X$, we can transform it into a Uniform random variable and back by using its CDF.}
 
 \subsection{Binomial Distribution} Let $X \sim \Bin(n,p), Y \sim \Bin(m,p)$ with $X \independent Y$.
 \begin{itemize}
@@ -227,7 +227,8 @@ Equivalently,
 
 
     \item[Min of Expos] If we have independent $X_i \sim \Expo(\lambda_i)$, then $\min(X_1, \dots, X_k) \sim \Expo(\lambda_1 + \lambda_2 + \dots + \lambda_k)$. 
-    \item[Max of Expos] If we have i.i.d.~$X_i \sim \Expo(\lambda)$, then $\max(X_1, \dots, X_k)$ has the same distribution as $Y_1+Y_2+\dots+Y_k$, where $Y_j \sim \Expo(j\lambda)$ and the $Y_j$ are independent.     
+    \item[Max of Expos] If we have i.i.d.~$X_i \sim \Expo(\lambda)$, then $\max(X_1, \dots, X_k)$ has the same distribution as $Y_1+Y_2+\dots+Y_k$, where $Y_j \sim \Expo(j\lambda)$ and the $Y_j$ are independent. So $E(\max(X_1, \dots, X_k)) = \frac{1}{\lambda} + \frac{1}{2\lambda} + \frac{1}{n\lambda}$ .
+    \item[Sum of Expos] Let $X_1, \dots, X_n \sim \Expo(\lambda)$. Then $\sum_{i = 1}^n X_i \sim \Gam(n, \lambda)$.    
 \end{description}
 
 \subsection{Gamma Distribution}
@@ -338,6 +339,8 @@ A convolution of $n$ random variables is simply their sum. For the following res
     \item  $X \sim \Gam(a_1, \lambda)$, $Y \sim \Gam(a_2, \lambda)$ $\longrightarrow  X + Y \sim\Gam(a_1 + a_2, \lambda)$.  $\Gam(n,\lambda)$ with $n$ an integer can  be thought of as a sum of i.i.d.~Expo($\lambda$) r.v.s.
     \item  $X \sim \NBin(r_1, p)$, $Y \sim \NBin(r_2, p)$ $\longrightarrow  X + Y \sim\NBin(r_1 + r_2, p)$. $\NBin(r,p)$ can  be thought of as a sum of i.i.d.~Geom($p$) r.v.s.
     \item  $X \sim \N(\mu_1, \sigma_1^2)$, $Y \sim \N(\mu_2, \sigma_2^2)$  $\longrightarrow  X + Y \sim \N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$
+    \item $X \sim \Gam(a, \lambda), Y \sim \Gam(b, \lambda)$ $\longrightarrow \frac{X}{X+Y} \sim \Beta(a, b)$, $X + Y \independent \frac{X}{X + Y}$
+    \item $X \sim \Beta(a, b) \longrightarrow 1 - X \sim \Beta(b, a)$
 \end{enumerate}
 \subsection{Symmetry}
 \begin{enumerate}
@@ -691,7 +694,7 @@ This gives transition matrix $Q$ with $q_{ij}=p_{ij}a_{ij}$ if $i\neq j$, and $q
 \item \textbf{Cauchy-Schwarz} $|E(XY)| \leq \sqrt{E(X^2)E(Y^2)}$
 \item \textbf{Markov} $P(X \geq a) \leq \frac{E|X|}{a}$ for $a>0$
 \item \textbf{Chebyshev} $P(|X - \mu| \geq a) \leq \frac{\sigma^2}{a^2}$ for $E(X)=\mu, \var(X) = \sigma^2$. Useful for proving convergence in probability; to prove consistency of estimator we just need to show that its variance goes to 0.
-\item \textbf{Jensen} $E(g(X)) \geq g(E(X))$ for $g$ convex; reverse if $g$ is concave
+\item \textbf{Jensen} $E(g(X)) \geq g(E(X))$ for $g$ convex; reverse if $g$ is concave. Inequality is strict for strictly convex/concave functions
 \item \textbf{Chernoff's} For any r.v. $X$ with finite mean $\mu$ and constant $a,t > 0$, $P(X \geq a) \leq \frac{E(e^tX)}{e^{ta}}$
 \end{enumerate}
 
@@ -745,7 +748,8 @@ Set the expectation of the sample moments equal to the actual sample moments. Co
     \text{1st moment } E(\frac{1}{n}\sum X_i) = f(\theta, \lambda) \\
     \text{2nd moment } E(\frac{1}{n}\sum X_i^2) = f(\theta, \lambda) \\
 \end{align*}
-You can then solve this system of equations for $\hat \theta$ and $\hat lambda$. 
+You can then solve this system of equations for $\hat \theta$ and $\hat 
+\lambda$. 
 \subsection{Maximum Likelihood Estimation}
 The \textbf{maximum likelihood estimate} of $\theta$ is the value $\hat\theta$ that maximizes the likelihood function $L(\theta; y)$. \hide{The corresponding estimator is called the \textbf{maximum likelihood estimator}. That is, if the maximum likelihood estimate is $T(y)$, then the maximum likelihood estimator is $T(Y)$.}
 \begin{description}
@@ -810,8 +814,8 @@ where the subscript of $\theta$ indicates that we compute the variance under the
 \end{description}
 
 \subsection{Cramer-Rao Lower Bound}
-Let $\hat \theta$ be an unbiased estimator of $\theta$. Under regularity conditions, $$Var(\hat \theta) \geq \frac{1}{\I(\theta^*)}$$. Since bias is 0, variance = MSE of the estimator. 
-For $\theta$ which may be biased, this becomes $$Var(\hat \theta) \geq \frac{g'(\theta^*))^2}{\I(\theta^*)}$$ where $E(\hat \theta) = g(\theta^*)$.
+Let $\hat \theta$ be an unbiased estimator of $\theta$. Under regularity conditions, $$\var(\hat \theta) \geq \frac{1}{\I(\theta^*)}$$. Since bias is 0, variance = MSE of the estimator. 
+For $\theta$ which may be biased, this becomes $$\var(\hat \theta) \geq \frac{g'(\theta^*))^2}{\I(\theta^*)}$$ where $E(\hat \theta) = g(\theta^*)$.
 
 \subsection{Asymptotic distribution of the MLE}
 For large sample size, it is \textit{approximately} true that the MLE is Normal, unbiased, and achieves the CRLB.
@@ -837,11 +841,17 @@ Let T be a sufficient statistic and $\hat \theta$ be any estimator for $\theta$.
 \subsubsection{Properties}
 If $Y$ is in NEF form (e.g. Normal ($\sigma^2$ known), Poisson, Binomial (n fixed), Negative Binomial (r fixed), $\Gamma(a, \lambda)$ (a known), then we have the following facts.
 \begin{enumerate}
-    \item $E(Y) = \Psi'(\theta), \var(\theta) = \Psi''(\theta)$, MGF $M_y(t) = E(e^{tY}) = e^{\Psi(\theta + t) - \Psi(\theta)}$.
+    \item $E(Y) = \Psi'(\theta), \var(Y) = \Psi''(\theta)$, MGF $M_y(t) = E(e^{tY}) = e^{\Psi(\theta + t) - \Psi(\theta)}$.
     \item $\bar Y$ is a sufficient statistic for $\theta$.
     \item MLE for mean paramter $\mu = E(Y)$ is $\mu = \bar Y$.
-    \item Fisher Information $I_1(\theta) = \Psi''(\theta)$.
+    \item Fisher Information $I_1(\theta) = \Psi''(\theta^*)$.
 \end{enumerate}
+
+\subsubsection{Examples}
+\begin{description}
+\item[Normal] Suppose we have $Y \sim \N(\mu, 1)$. Then we have $\theta = \mu$, $\psi(\theta) = \frac{\theta}{2}$, $h(y) = \frac{1}{\sqrt{2\pi}}e^{-y^2/2}$
+\item[Binomial] Suppose we have $Y \sim \Bin(n, p)$ with $n$ known. Then we can let $\theta = \log(\frac{p}{1-p}) = \logit(p)$, $\psi(\theta) = n\log(1 + e^\theta)$, $h(y) = \binom{n}{y} I(y \in \{1, 2, \dots, n\})$.
+\end{description}
 
 \subsection{MLEs \& Fisher Informations}
 \begin{itemize}
@@ -858,7 +868,7 @@ If $Y$ is in NEF form (e.g. Normal ($\sigma^2$ known), Poisson, Binomial (n fixe
 \end{itemize}
 
 \subsection{Student-t Distribution}
-Let $T = \frac{E}{\sqrt{V/n}}$ where $Z \sim \N(0, 1)$ and $V \sim \chi_n^2$ (remember, special case of Gamma) where $Z \independent V$, then $T \sim \stu_n$ (where $n$ is called the \# of degrees of freedom). If $n = 1$, then $T \sim \textnormal{Cauchy}$. Can find mean, variance, in your head by remembering it's a sum of standard Normals.
+Let $T = \frac{Z}{\sqrt{V/n}}$ where $Z \sim \N(0, 1)$ and $V \sim \chi_n^2$ (remember, special case of Gamma) where $Z \independent V$, then $T \sim \stu_n$ (where $n$ is called the \# of degrees of freedom). If $n = 1$, then $T \sim \textnormal{Cauchy}$. Can find mean, variance, in your head by remembering it's a sum of standard Normals.
 
 \textbf{Also:} For $Z_1,\dots,Z_n\simiid \N(0,1)$, we can find using JFI that $\sum_{j=1}^n (Z_j-\bar{Z_n})^2\sim \chi^2_{n-1}$.
 
@@ -937,7 +947,10 @@ The $1 - \alpha$ confidence interval for $Y$ is
 \end{description}
 
 \subsection{z-test}
-\reminder
+Suppose we have data $\vec{Y} = (Y_1, \dots, Y_n)$ that are i.i.d. $\N(\mu, \sigma^2)$. If we don't know $\mu$ but know $\sigma^2$, then we know that
+\begin{align*}
+    Z = \frac{\bar{Y} - \mu_0}{\sigma/\sqrt{n}} \sim \N(0, 1)
+\end{align*}
 
 \subsection{t-test}
 Let 
@@ -1035,7 +1048,7 @@ If there is a cost per sample $c_\ell$ in each stratum and a total budget, then 
 \subsection{Horvitz-Thompson Estimator}
 Let $S$ be the set of distinct ID numbers members of a random sample from the population. Let $\pi_i = P(i \in S)$ be the probability that individual $i$ is included in the sample. Assume that $\pi_i$ are known in advance and that $\pi_i > 0 \forall i$, then the \textit{Horvitz-Thomspon} estimator
 \begin{align*}
-    \tau_{\text{HT}} \sum_{i \in S} \frac{y_i}{\pi_i}
+    \tau_{\text{HT}} = \sum_{i \in S} \frac{y_i}{\pi_i}
 \end{align*}
 is \textbf{unbiased} for the population total $\tau = y_1 + \dots + y_N$.\\ 
 If $N$ is known, then 
@@ -1080,6 +1093,8 @@ Resample from sample \textit{with replacement}, use empirical distribution to ap
     \centering
     \includegraphics[width=\linewidth]{figures/bootstrap_world.png}
 \end{figure}
+\subsubsection{Standard Error}
+To find the standard error of an estimator with the bootstrap, suppose we have our estimator $\hat\theta$. Then calculate $\hat\theta^*_i$ for each of the bootstrap samples, and calculate the empirical variance of $\hat\theta^*_i$. 
 
 \subsection{Sharp Null and Randomization Tests}
 \begin{description}
@@ -1230,6 +1245,38 @@ where $\hat\mubold_{\text{JS}}$ has strictly lower risk that $\vec{Y}, \forall \
 \end{align*}
 \end{description}
 
+\section{Shortcuts} \hrule height 1pt
+
+\subsection{Simplified Likelihoods of Common Distributions} 
+\begin{description}
+\item[Bernoulli] Let $Y_i \sim \Bern(p)$ with $p$ unknown. Let $k = \sum_{i = 1}^n Y_i$. Then,
+\begin{align*}
+    L(p; \vec{Y}) = p^k(1 - p)^{n - k}
+\end{align*}
+\item[Binomial] Let $Y_i \sim \Bin(m, p)$ with $m$ known and $p$ unknown. Let $k = \sum_{i = 1}^n Y_i$. Then,
+\begin{align*}
+    L(p; \vec{Y}) = p^k (1 - p)^{mn - k}
+\end{align*} 
+Basically we can treat the binomial likelihood as a bunch of Bernoullis with the constants dropped.
+\item[Poisson] Let $Y_i \sim \Pois(\lambda)$ with $\lambda$ unknown. Then, 
+\begin{align*}
+    L(\lambda; \vec{Y}) = e^{-n \lambda} \lambda^{\sum_{i = 1}^n Y_i}
+\end{align*}
+\item[Expo] Let $Y_i \sim \Expo(\lambda)$ with $\lambda$ unknown. Then,
+\begin{align*}
+    L(\lambda; \vec{Y}) = \lambda^n e^{-\lambda \sum_{i = 1}^n Y_i}
+\end{align*} 
+\item[Normal known variance] Let $Y_i \sim \N(\mu, \sigma^2)$ with $\sigma^2$ known. Then,
+\begin{align*}
+    L(\mu; \vec{Y}) = e^{-\frac{1}{2\sigma^2} \sum_{i = 1}^n (Y_i - \mu)^2}
+\end{align*}
+\item[Normal unknown variance] Let $Y_i \sim \N(\mu, \sigma^2)$ with $\mu$ and $\sigma^2$ unknown. Then,
+\begin{align*}
+    L(\mu; \vec{Y}) = \frac{1}{\sigma^n}e^{-\frac{1}{2\sigma^2} \sum_{i = 1}^n (Y_i - \mu)^2}
+\end{align*}
+\end{description}
+\reminder
+
 \section{Canonical Examples} \hrule height 1pt
 \subsubsection{MLE for Normal with Both Unknown}
 By applying JFI, see that the MLE $\hat\mu=\bar{X}$ does not depend on $\sigma^2$. Plug in so the second term from JFI drops out. Set $t=\sum_{j=1}^n (x_j-\overline{x_n})^2$ (it is a constant of the data), take the derivative and find $\hat\sigma^2=\frac{t}{n}$.
@@ -1261,6 +1308,13 @@ EM&=\sum_{m=n}^t \frac{m\binom{m-1}{n-1}}{\binom{t}{n}}=\frac{n}{n+1}(t+1)\text{
 We can \textit{propose} a new estimator by fixing the bias, so let $\hat t=\frac{n+1}{n}M-1$ by algebra.
 
 We can find the MOM: $E(Y_j)=\frac{1}{t}\sum_{i=1}^t i=\frac{t+1}{2}$. So $\hat t_{\text{MOM}}=2\bar{y}-1$.
+
+\subsubsection{Rainy-Sunny Days}
+Suppose that we have i.i.d. pairs of data $(Y_i, Z_i)$ where $Z_i \sim \Bern(p)$ and that $f_{Y_i | Z_i = 1} = \pi_1(x), f_{Y_i | Z_i = 0} = \pi_2(x)$. Let $k = \sum_{i = 1}^n Z_i$. We can reorder our pairs so that $Z_1, \dots, Z_k = 1$ and $Z_{k + 1}, \dots, Z_n = 0$. Then we can write our likelihood function as
+\begin{align*}
+    L(p, \theta; \vec{Z}, \vec{Y}) &= p^k(1 - p)^{n - k} \left(\prod_{i = 1}^k \pi_1(Y_i)\right)\left(\prod_{i = k + 1}^n \pi_2(Y_i)\right) \\
+    &= p^k(1 - p)^{n - k} \prod_{i = 1}^n Z_i \pi_1(Y_i) + (1 - Z_i) \pi_2(Y_2)
+\end{align*}
 
 \end{multicols*}
 
